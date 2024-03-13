@@ -26,7 +26,8 @@ const TypeHousing = [
   { id: 'hotel', type: 'Отель' },
 ];
 
-const Price = [
+const FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+const Prices = [
   {
     id: 'middle',
     min: 10000,
@@ -54,6 +55,7 @@ export {
   ErrorText,
   RERENDER_DELAY,
   TypeHousing,
-  Price,
+  FEATURES,
+  Prices
 };
 

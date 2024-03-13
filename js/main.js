@@ -3,6 +3,7 @@ import { getData } from './api.js';
 import { loadingMap, showAdsMarkers, setMainMarkerMoveend } from './map.js';
 import { createErrorLoad } from './message.js';
 import { ErrorText, RERENDER_DELAY } from './constants.js';
+import { setMapFiltersChange, getFilteredAds, filteredAds } from './filters.js';
 import { debounce } from './utils.js';
 
 const pageLoading = new Promise((resolve, rejec) => {
@@ -23,15 +24,19 @@ pageLoading
     return ads;
   })
   .then((ads) => {
-    console.log(ads.filter((ad) => ad.offer.type === 'bungalow'))
-    console.log(ads.filter((ad) => ad.offer.features))
-    console.log(ads[2].offer.features.includes('wifi'))
-    console.log(ads);
     showAdsMarkers(ads);
     activateMapFilers();
+    setMapFiltersChange(debounce(() => {
+      getFilteredAds(ads);
+      showAdsMarkers(filteredAds);
+      setMainMarkerMoveend(debounce(
+        () => showAdsMarkers(ads),
+        RERENDER_DELAY,
+      ));
+    }, RERENDER_DELAY,
+    ));
     setMainMarkerMoveend(debounce(
       () => showAdsMarkers(ads),
       RERENDER_DELAY,
     ));
-
   });
