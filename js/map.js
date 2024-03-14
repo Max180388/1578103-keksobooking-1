@@ -99,4 +99,4 @@ const resetMap = () => {
     }, SCALE_MAP);
 };
 
-export { loadingMap, showAdsMarkers, centralPointLat, centralPointLng, setMainMarkerMoveend };
+export { loadingMap, showAdsMarkers, centralPointLat, centralPointLng, setMainMarkerMoveend, };
