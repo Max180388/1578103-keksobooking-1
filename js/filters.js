@@ -1,15 +1,6 @@
 import { centralPointLat, centralPointLng } from './map.js';
-import { Prices, RERENDER_DELAY } from './constants.js';
-import { showAdsMarkers, setMainMarkerMoveend } from './map.js';
+import { Prices, RERENDER_DELAY, FilterType } from './constants.js';
 import { debounce } from './utils.js';
-
-const FilterType = {
-  type: 'housing-type',
-  price: 'housing-price',
-  rooms: 'housing-rooms',
-  guests: 'housing-guests',
-  features: 'features',
-};
 
 const mapFilters = document.querySelector('.map__filters');
 const housingFeatures = mapFilters.querySelectorAll('.map__checkbox');
@@ -76,18 +67,39 @@ const resetfilteredAds = (ads) => {
 const filterPoints = () => Object.keys(selectedFilters)
   .reduce((acc, item) => filter[item](acc), filteredAds);
 
-mapFilters.addEventListener('change', debounce((e) => {
-  changeSelectedFilters(e.target.name, e.target.value);
-  showAdsMarkers(filterPoints());
-}, RERENDER_DELAY));
+// mapFilters.addEventListener('change', debounce((e) => {
+//   changeSelectedFilters(e.target.name, e.target.value);
+//   showAdsMarkers(filterPoints());
+// }, RERENDER_DELAY));
+
+// const getFilteredAds = (ads) => {
+//   resetfilteredAds(ads);
+//   showAdsMarkers(filterPoints());
+//   setMainMarkerMoveend(debounce(
+//     () => showAdsMarkers(filterPoints()),
+//     RERENDER_DELAY
+//   ));
+// };
+
 
 const getFilteredAds = (ads) => {
   resetfilteredAds(ads);
-  showAdsMarkers(filterPoints());
-  setMainMarkerMoveend(debounce(
-    () => showAdsMarkers(filterPoints()),
-    RERENDER_DELAY
-  ));
+  const filteredAdsFragment = [];
+  filteredAdsFragment.push(...filterPoints());
+  filteredAds.length = 0;
+  filteredAds.push(...filteredAdsFragment);
 };
 
-export { compareMarkers, getFilteredAds };
+const getFilteredData = (ads, createMainMarker, createAdsMarker) => {
+  resetfilteredAds(ads);
+  createAdsMarker(filteredAds);
+  createMainMarker(() => createAdsMarker(filteredAds));
+
+  mapFilters.addEventListener('change', debounce((e) => {
+    changeSelectedFilters(e.target.name, e.target.value);
+    getFilteredAds(ads);
+    createAdsMarker(filteredAds);
+  }, RERENDER_DELAY));
+};
+
+export { compareMarkers, getFilteredData };

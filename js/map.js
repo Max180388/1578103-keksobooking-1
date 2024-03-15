@@ -1,6 +1,7 @@
-import { Сoordinates, SCALE_MAP, MAX_ADS_MARKERS } from './constants.js';
+import { Сoordinates, SCALE_MAP, MAX_ADS_MARKERS, RERENDER_DELAY } from './constants.js';
 import { compareMarkers } from './filters.js';
 import { createPopup } from './create-popup.js';
+import { debounce } from './utils.js';
 
 let loadingMap = false;
 let centralPointLat = Сoordinates.LAT;
@@ -52,11 +53,11 @@ mainMarker.addTo(map);
 
 
 const setMainMarkerMoveend = (cd) => {
-  mainMarker.on('moveend', (e) => {
+  mainMarker.on('moveend', debounce((e) => {
     centralPointLat = e.target.getLatLng().lat;
     centralPointLng = e.target.getLatLng().lng;
     cd();
-  });
+  }, RERENDER_DELAY));
 };
 
 const createAdsMarkers = (ad) => {
@@ -99,4 +100,4 @@ const resetMap = () => {
     }, SCALE_MAP);
 };
 
-export { loadingMap, showAdsMarkers, centralPointLat, centralPointLng, setMainMarkerMoveend, };
+export { loadingMap, showAdsMarkers, centralPointLat, centralPointLng, setMainMarkerMoveend };

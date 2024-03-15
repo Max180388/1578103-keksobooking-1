@@ -44,6 +44,13 @@ const Prices = [
     max: Infinity,
   }
 ];
+const FilterType = {
+  type: 'housing-type',
+  price: 'housing-price',
+  rooms: 'housing-rooms',
+  guests: 'housing-guests',
+  features: 'features',
+};
 
 export {
   DATA_URL,
@@ -56,6 +63,7 @@ export {
   RERENDER_DELAY,
   TypeHousing,
   FEATURES,
-  Prices
+  Prices,
+  FilterType,
 };
 

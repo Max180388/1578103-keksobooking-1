@@ -1,9 +1,10 @@
 import { makePageInactive, activateMapFilers, activateadForm } from './page-states.js';
 import { getData } from './api.js';
-import { loadingMap } from './map.js';
+import { loadingMap, showAdsMarkers, setMainMarkerMoveend } from './map.js';
 import { createErrorLoad } from './message.js';
 import { ErrorText } from './constants.js';
-import { getFilteredAds, } from './filters.js';
+import { getFilteredData } from './filters.js';
+import './slider.js';
 
 const pageLoading = new Promise((resolve, rejec) => {
   makePageInactive();
@@ -21,6 +22,16 @@ pageLoading
     getData()
       .then((ads) => {
         activateMapFilers();
-        getFilteredAds(ads);
+        getFilteredData(ads, setMainMarkerMoveend, showAdsMarkers);
       });
   });
+
+// pageLoading
+// .then(() => {
+//   getData()
+//     .then((ads) => {
+//       activateMapFilers();
+//       console.log(filterPoints());
+//       getFilteredAds(ads);
+//     });
+// });
